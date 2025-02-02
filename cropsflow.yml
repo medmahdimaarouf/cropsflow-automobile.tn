@@ -1,0 +1,16 @@
+name: "Automobile.tn"
+title: "Automobile.tn web scraping software"
+version: "0.1"
+type: "application"
+root: ""
+sourceRoot: "src",
+prefix: "app",
+templates: "./templates"
+repository:
+  type: "git"
+  url: "https://github.com/"
+author: "Agile Softwares",
+license: "MIT",
+bugs:
+  url: "https://github.com/medmahdimaarouf/poc-scraping-autombile.tn/issues"
+token: ""
