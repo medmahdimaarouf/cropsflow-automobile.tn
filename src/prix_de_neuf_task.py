@@ -1,4 +1,4 @@
-from cropsflow import task
+from cropsflow.common.decorators import task
 
 
 @task(template_path='../templates/prix_de_neuf.task.xml')
