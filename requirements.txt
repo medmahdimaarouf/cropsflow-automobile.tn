@@ -1,3 +1,5 @@
 -e C:/Users/msi/Desktop/CropsFlow/workspace/cropsflow
 -e C:/Users/msi/Desktop/CropsFlow/workspace/cropsflow-http
 -e C:/Users/msi/Desktop/CropsFlow/workspace/cropsflow-dom
+-e C:/Users/msi/Desktop/CropsFlow/workspace/cropsflow-json
+-e C:/Users/msi/Desktop/CropsFlow/workspace/cropsflow-mongo

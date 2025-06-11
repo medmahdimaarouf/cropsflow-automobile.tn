@@ -1,141 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<task dataset="prix-de-neuf">
-    <metadata>
-        <meta type="title">Load models for each car brand</meta>
-        <meta type="version">1.0</meta>
-        <meta type="description">
-            Load models for each car brand
-        </meta>
-    </metadata>
-
+<task>
+    <title>Load models for each car brand</title>
+    <description>
+        Fetch all brands
+    </description>
+    <tags>
+        task,automation,robots
+    </tags>
+    <readme src="./readme.md"/>
     <playbook>
-        <axios-get
-                label="loading brands page"
-                url="https://www.automobile.tn/fr">
-            <axios-dom-response label="Parsing brands page dom response">
-                <dom-select-all label="Selecting brands" selector=".brands-list>a">
-                    <key-value label="brand key value data pipe">
-                        <dom-attribute-value data-pipe-accessor="link"
-                                             label="getting brand url link"
-                                             key="href" />
-                        <dom-first-child-element label="select brand image element" selector="img">
-                            <dom-attribute-value data-pipe-accessor="imageUrl"
-                                                 label="getting brand image url" key="src" />
-                            <dom-attribute-value data-pipe-accessor="name"
-                                                 label="getting brand name" key="alt" />
-                        </dom-first-child-element>
-                        <axios-fetch-link base-url="https://automobile.tn/"
-                                          label="following brand link">
-                            <axios-dom-response label="Parsing dom response">
-                                <list label="register brand models list data pipe"
-                                      data-pipe-accessor="models">
-                                    <dom-select-all label="Selcting brand model"
-                                                    selector=".versions-item>a">
-                                        <key-value label="brand model key value data pipe">
-                                            <dom-attribute-value data-pipe-accessor="link"
-                                                                 label="getting url link"
-                                                                 key="href" />
-                                            <dom-first-child-element
-                                                    label="select brand item image element"
-                                                    selector="img">
-                                                <dom-attribute-value data-pipe-accessor="imageUrl"
-                                                                     label="getting brand image url" key="src" />
-                                            </dom-first-child-element>
-                                            <dom-first-child-element
-                                                    label="select brand item title element"
-                                                    selector="h2">
-                                                <dom-text-content data-pipe-accessor="title"
-                                                                  label="getting brand title" />
-                                            </dom-first-child-element>
-                                            <dom-first-child-element
-                                                    label="select brand item price element"
-                                                    selector=".price">
-                                                <datapipe-price data-pipe-accessor="price"
-                                                                label="parsing model price">
-                                                    <dom-text-content  data-pipe-accessor=""
-                                                                       trim="true"
-                                                                       label="getting brand price" />
-                                                </datapipe-price>
-
-                                            </dom-first-child-element>
-                                            <list label="register brand model versions data pipe"
-                                                  data-pipe-accessor="versions">
-                                                <axios-fetch-link base-url="https://automobile.tn/"
-                                                                  label="following brand model versions link">
-                                                    <axios-dom-response
-                                                            label="Parsing brand model versions dom response">
-                                                        <dom-exists
-                                                                label="check multiple versions found"
-                                                                css-selector="table.versions">
-                                                            <dom-select-all
-                                                                    label="Selcting brand model multiple versions"
-                                                                    selector="table.versions tbody > tr">
-                                                                <axios-fetch-link
-                                                                        base-url="https://automobile.tn/"
-                                                                        label="following brand model versions link"
-                                                                        css-selector="td.version a">
-                                                                    <axios-dom-response
-                                                                            label="Parsing brand model version dom response">
-                                                                        <key-value
-                                                                                label="key value for signle model version">
-                                                                            <dom-first-child-element
-                                                                                    label="selector first child page tittle"
-                                                                                    selector="h3.page-title">
-                                                                                <dom-text-content
-                                                                                        data-pipe-accessor="name"
-                                                                                        label="getting brand version name" />
-                                                                            </dom-first-child-element>
-                                                                            <dom-first-child-element
-                                                                                    label="first price child"
-                                                                                    selector=".buttons>div:first-child">
-                                                                                <datapipe-price
-                                                                                        data-pipe-accessor="price"
-                                                                                        label="parsing version price">
-                                                                                    <dom-text-content  data-pipe-accessor=""
-                                                                                                       label="getting model version price" />
-                                                                                </datapipe-price>
-                                                                            </dom-first-child-element>
-                                                                        </key-value>
-                                                                    </axios-dom-response>
-                                                                </axios-fetch-link>
-                                                            </dom-select-all>
-                                                        </dom-exists>
-                                                        <dom-exists
-                                                                label="check signle version found"
-                                                                css-selector=".buttons">
-                                                            <key-value
-                                                                    label="key value for signle model version">
-                                                                <dom-first-child-element
-                                                                        label="selector first child page tittle"
-                                                                        selector="h3.page-title">
-                                                                    <dom-text-content
-                                                                            data-pipe-accessor="name"
-                                                                            label="getting brand version name" />
-                                                                </dom-first-child-element>
-                                                                <dom-first-child-element
-                                                                        label="first price child"
-                                                                        selector=".buttons>div:first-child">
-                                                                    <datapipe-price
-                                                                            data-pipe-accessor="price"
-                                                                            label="parsing version price">
-                                                                        <dom-text-content  data-pipe-accessor=""
-                                                                                           label="getting model version price" />
-                                                                    </datapipe-price>
-                                                                </dom-first-child-element>
-                                                            </key-value>
-                                                        </dom-exists>
-                                                    </axios-dom-response>
-                                                </axios-fetch-link>
-                                            </list>
-                                        </key-value>
-
-                                    </dom-select-all>
-                                </list>
-                            </axios-dom-response>
-                        </axios-fetch-link>
-                    </key-value>
-                </dom-select-all>
-            </axios-dom-response>
-        </axios-get>
+        <mongo-create-dataset-action dataset="prix_de_neuf" drop="True">
+            <http-get url="https://www.automobile.tn/fr">
+                <http-html-response>
+                    <html-select_all css=".brands-list>a">
+                        <mongo-dataset-insert-pipe dataset="prix_de_neuf">
+                            <map>
+                                <html-attribute-pipe name="href" accumulator-accessor="link"/>
+                                <html-attribute-pipe css="img" name="src" accumulator-accessor="imageUrl"/>
+                                <html-attribute-pipe css="img" name="alt" accumulator-accessor="name"/>
+                                <http-fetch-link-action base-url="https://automobile.tn/">
+                                    <http-html-response>
+                                        <list accumulator-accessor="models">
+                                            <html-select_all css=".versions-item>a">
+                                                <map>
+                                                    <html-attribute-pipe name="href" accumulator-accessor="link"/>
+                                                    <html-attribute css="img" name="src" accumulator-accessor="imageUrl"/>
+                                                    <html-text-content-pipe css="h2" accumulator-accessor="title"/>
+                                                    <pipe-price accumulator-accessor="price">
+                                                        <html-text-content-pipe css=".price" default="0.0"/>
+                                                    </pipe-price>
+                                                    <list accumulator-accessor="versions">
+                                                        <http-fetch-link-action base-url="https://automobile.tn/">
+                                                            <http-html-response>
+                                                                <html-select_all css="table.versions tbody > tr">
+                                                                    <http-fetch-link-action base-url="https://automobile.tn/">
+                                                                        <http-html-response>
+                                                                            <map>
+                                                                                <html-text-content-pipe css="h3.page-title" accumulator-accessor="name"/>
+                                                                                <pipe-price accumulator-accessor="price">
+                                                                                    <html-text-content-pipe css=".buttons>div:first-child" default="0.0"/>
+                                                                                </pipe-price>
+                                                                            </map>
+                                                                        </http-html-response>
+                                                                    </http-fetch-link-action>
+                                                                </html-select_all>
+                                                                <map>
+                                                                    <html-text-content-pipe css="h3.page-title" accumulator-accessor="name"/>
+                                                                    <pipe-price accumulator-accessor="price">
+                                                                        <html-text-content-pipe css=".buttons>div:first-child" default="0.0"/>
+                                                                    </pipe-price>
+                                                                </map>
+                                                            </http-html-response>
+                                                        </http-fetch-link-action>
+                                                    </list>
+                                                </map>
+                                            </html-select_all>
+                                        </list>
+                                    </http-html-response>
+                                </http-fetch-link-action>
+                            </map>
+                        </mongo-dataset-insert-pipe>
+                    </html-select_all>
+                </http-html-response>
+            </http-get>
+        </mongo-create-dataset-action>
     </playbook>
 </task>
