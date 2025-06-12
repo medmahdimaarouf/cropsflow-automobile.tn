@@ -1,3 +1,6 @@
+from typing import Dict, Any
+
+from cropsflow import TaskContext, D
 from cropsflow.common import Pipe
 from cropsflow.common.decorators import pipe
 
@@ -6,7 +9,8 @@ from cropsflow.common.decorators import pipe
 class PricePipe(Pipe):
 
     def __init__(self):
-        self.set_data(data='')
+        super().__init__(data=0)
 
-    def accumulate(self, data: str) -> None:
-        pass
+    def accumulate(self, context: TaskContext, options: Dict[str, Any] = {}, data: D = None,
+                   accessor: str = None) -> None:
+        self.set_data(0)

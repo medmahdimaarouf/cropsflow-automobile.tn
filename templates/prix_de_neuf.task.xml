@@ -24,7 +24,7 @@
                                             <html-select_all css=".versions-item>a">
                                                 <map>
                                                     <html-attribute-pipe name="href" accumulator-accessor="link"/>
-                                                    <html-attribute css="img" name="src" accumulator-accessor="imageUrl"/>
+                                                    <html-attribute-pipe css="img" name="src" accumulator-accessor="imageUrl"/>
                                                     <html-text-content-pipe css="h2" accumulator-accessor="title"/>
                                                     <pipe-price accumulator-accessor="price">
                                                         <html-text-content-pipe css=".price" default="0.0"/>
@@ -32,7 +32,7 @@
                                                     <list accumulator-accessor="versions">
                                                         <http-fetch-link-action base-url="https://automobile.tn/">
                                                             <http-html-response>
-                                                                <html-select_all css="table.versions tbody > tr">
+                                                                <html-select_all css=".versions-item>a">
                                                                     <http-fetch-link-action base-url="https://automobile.tn/">
                                                                         <http-html-response>
                                                                             <map>
