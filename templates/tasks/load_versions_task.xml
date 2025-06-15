@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task>
+    <title>Load models for each car brand</title>
+    <description>
+        Fetch all brands
+    </description>
+    <tags>
+        task,automation,robots
+    </tags>
+    <readme src="./readme.md"/>
+    <playbook>
+        <mongo-create-dataset-action dataset="models" drop="True">
+            <http-get url="https://www.automobile.tn/fr">
+                <http-html-response>
+                    <html-select-all css=".brands-list>a">
+                        <mongo-dataset-insert-pipe dataset="models">
+                            <http-fetch-link-action id="brand-link-context" base-url="https://automobile.tn">
+                                <http-html-response>
+                                    <html-select-all css=".versions-item>a">
+                                        <http-fetch-link-action id="model-link-context" base-url="https://automobile.tn">
+                                            <http-html-response>
+                                                <html-has-child css=".version-details">
+                                                    <map dataset="versions">
+                                                        <html-get-attribute name="href" key="brandLink" context="brand-link-context"/>
+                                                        <html-get-attribute css="img" name="src" key="brandImageUrl" context="brand-link-context"/>
+                                                        <html-get-attribute css="img" name="alt" key="brandName" context="brand-link-context"/>
+
+                                                        <html-get-attribute name="href" key="modelLink" context="model-link-context"/>
+                                                        <html-get-attribute css="img" name="src" key="modelImageUrl" context="model-link-context"/>
+                                                        <html-get-text-content css="h2" key="modelTitle" context="model-link-context"/>
+
+                                                        <html-get-attribute css=".version-img img" name="src" key="versionImage"></html-get-attribute>
+                                                        <html-get-text-content css="div.buttons > div > span" key="price"></html-get-text-content>
+                                                    </map>
+                                                </html-has-child>
+                                                <html-has-child css="table.versions">
+                                                    <html-select-all css="td.version>a">
+                                                        <http-fetch-link-action base-url="https://automobile.tn">
+                                                            <http-html-response>
+                                                                <map dataset="versions">
+                                                                    <html-get-attribute name="href" key="brandLink" context="brand-link-context"/>
+                                                                    <html-get-attribute css="img" name="src" key="brandImageUrl" context="brand-link-context"/>
+                                                                    <html-get-attribute css="img" name="alt" key="brandName" context="brand-link-context"/>
+
+                                                                    <html-get-attribute name="href" key="modelLink" context="model-link-context"/>
+                                                                    <html-get-attribute css="img" name="src" key="modelImageUrl" context="model-link-context"/>
+                                                                    <html-get-text-content css="h2" key="modelTitle" context="model-link-context"/>
+
+                                                                    <html-get-attribute css=".version-img img" name="src" key="versionImage"></html-get-attribute>
+                                                                    <html-get-text-content css="div.buttons > div > span" key="price"></html-get-text-content>
+                                                                </map>
+                                                            </http-html-response>
+                                                        </http-fetch-link-action>
+                                                    </html-select-all>
+                                                </html-has-child>
+                                            </http-html-response>
+                                        </http-fetch-link-action>
+                                    </html-select-all>
+                                </http-html-response>
+                            </http-fetch-link-action>
+                        </mongo-dataset-insert-pipe>
+                    </html-select-all>
+                </http-html-response>
+            </http-get>
+        </mongo-create-dataset-action>
+    </playbook>
+</task>

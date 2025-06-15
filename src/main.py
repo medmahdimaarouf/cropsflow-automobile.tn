@@ -4,7 +4,6 @@ from cropsflow import CropsFlow
 from cropsflow.orchestrator import Worker
 
 from app_module import AppModule
-from prix_de_neuf_task import PrixDeNeufTask
 from src.tasks import LoadBrandsTask, LoadVersionsTask, LoadModelsTask
 
 
