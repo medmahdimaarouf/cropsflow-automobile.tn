@@ -5,11 +5,12 @@ from cropsflow.orchestrator import Worker
 
 from app_module import AppModule
 from prix_de_neuf_task import PrixDeNeufTask
+from src.tasks import LoadBrandsTask, LoadVersionsTask, LoadModelsTask
 
 
 async def start():
     app = await CropsFlow.start(AppModule)
-    worker: Worker = app.get_orchestrator().create_worker(PrixDeNeufTask)
+    worker: Worker = app.get_orchestrator().create_worker(LoadModelsTask)
     worker.start()
 
 

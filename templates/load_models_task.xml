@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<task>
+    <title>Load models for each car brand</title>
+    <description>
+        Fetch all brands
+    </description>
+    <tags>
+        task,automation,robots
+    </tags>
+    <readme src="./readme.md"/>
+    <playbook>
+        <mongo-create-dataset-action dataset="models" drop="True">
+            <http-get url="https://www.automobile.tn/fr">
+                <http-html-response>
+                    <html-select-all css=".brands-list>a">
+                        <mongo-dataset-insert-pipe dataset="models">
+                            <http-fetch-link-action id="brand-link-context" base-url="https://automobile.tn">
+                                <http-html-response>
+                                    <html-select-all css=".versions-item>a">
+                                        <map dataset="models">
+                                            <html-get-attribute name="href" key="brandLink"
+                                                                context="brand-link-context"/>
+                                            <html-get-attribute css="img" name="src" key="brandImageUrl"
+                                                                context="brand-link-context"/>
+                                            <html-get-attribute css="img" name="alt" key="brandName"
+                                                                context="brand-link-context"/>
+
+                                            <html-get-attribute name="href" key="link"/>
+                                            <html-get-attribute css="img" name="src" key="imageUrl"/>
+                                            <html-get-text-content css="h2" key="title"/>
+                                        </map>
+                                    </html-select-all>
+                                </http-html-response>
+                            </http-fetch-link-action>
+                        </mongo-dataset-insert-pipe>
+                    </html-select-all>
+                </http-html-response>
+            </http-get>
+        </mongo-create-dataset-action>
+    </playbook>
+</task>

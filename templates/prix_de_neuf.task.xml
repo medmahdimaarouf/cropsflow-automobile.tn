@@ -12,55 +12,58 @@
         <mongo-create-dataset-action dataset="prix_de_neuf" drop="True">
             <http-get url="https://www.automobile.tn/fr">
                 <http-html-response>
-                    <html-select_all css=".brands-list>a">
+                    <html-select-all css=".brands-list>a">
                         <mongo-dataset-insert-pipe dataset="prix_de_neuf">
                             <map>
-                                <html-attribute-pipe name="href" accumulator-accessor="link"/>
-                                <html-attribute-pipe css="img" name="src" accumulator-accessor="imageUrl"/>
-                                <html-attribute-pipe css="img" name="alt" accumulator-accessor="name"/>
+                                <html-get-attribute name="href" key="link"/>
+                                <html-get-attribute css="img" name="src" key="imageUrl"/>
+                                <html-get-attribute css="img" name="alt" key="name"/>
                                 <http-fetch-link-action base-url="https://automobile.tn/">
                                     <http-html-response>
-                                        <list accumulator-accessor="models">
-                                            <html-select_all css=".versions-item>a">
+                                        <list key="models">
+                                            <html-select-all css=".versions-item>a">
                                                 <map>
-                                                    <html-attribute-pipe name="href" accumulator-accessor="link"/>
-                                                    <html-attribute-pipe css="img" name="src" accumulator-accessor="imageUrl"/>
-                                                    <html-text-content-pipe css="h2" accumulator-accessor="title"/>
-                                                    <pipe-price accumulator-accessor="price">
-                                                        <html-text-content-pipe css=".price" default="0.0"/>
+                                                    <html-get-attribute name="href" key="link"/>
+                                                    <html-get-attribute css="img" name="src" key="imageUrl"/>
+                                                    <html-get-text-content css="h2" key="title"/>
+                                                    <pipe-price key="price">
+                                                        <html-get-text-content css=".price" default="0.0"/>
                                                     </pipe-price>
-                                                    <list accumulator-accessor="versions">
+                                                    <list key="versions">
                                                         <http-fetch-link-action base-url="https://automobile.tn/">
                                                             <http-html-response>
-                                                                <html-select_all css=".versions-item>a">
-                                                                    <http-fetch-link-action base-url="https://automobile.tn/">
+                                                                <html-select-all css=".versions-item>a">
+                                                                    <http-fetch-link-action
+                                                                            base-url="https://automobile.tn/">
                                                                         <http-html-response>
                                                                             <map>
-                                                                                <html-text-content-pipe css="h3.page-title" accumulator-accessor="name"/>
-                                                                                <pipe-price accumulator-accessor="price">
-                                                                                    <html-text-content-pipe css=".buttons>div:first-child" default="0.0"/>
+                                                                                <html-get-text-content
+                                                                                        css="h3.page-title" key="name"/>
+                                                                                <pipe-price key="price">
+
                                                                                 </pipe-price>
                                                                             </map>
                                                                         </http-html-response>
                                                                     </http-fetch-link-action>
-                                                                </html-select_all>
+                                                                </html-select-all>
                                                                 <map>
-                                                                    <html-text-content-pipe css="h3.page-title" accumulator-accessor="name"/>
-                                                                    <pipe-price accumulator-accessor="price">
-                                                                        <html-text-content-pipe css=".buttons>div:first-child" default="0.0"/>
+                                                                    <html-get-text-content css="h3.page-title"
+                                                                                           key="name"/>
+                                                                    <pipe-price key="price">
+
                                                                     </pipe-price>
                                                                 </map>
                                                             </http-html-response>
                                                         </http-fetch-link-action>
                                                     </list>
                                                 </map>
-                                            </html-select_all>
+                                            </html-select-all>
                                         </list>
                                     </http-html-response>
                                 </http-fetch-link-action>
                             </map>
                         </mongo-dataset-insert-pipe>
-                    </html-select_all>
+                    </html-select-all>
                 </http-html-response>
             </http-get>
         </mongo-create-dataset-action>

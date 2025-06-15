@@ -6,11 +6,15 @@ from cropsflow.common import CommonModule
 from cropsflow_http import HttpModule
 from prix_de_neuf_task import PrixDeNeufTask
 from src.pipes import PricePipe
+from src.tasks import LoadBrandsTask, LoadVersionsTask, LoadModelsTask
 
 
 @module(
     declarations=[
         PrixDeNeufTask,
+        LoadBrandsTask,
+        LoadVersionsTask,
+        LoadModelsTask,
         PricePipe
     ],
     imports=[
